@@ -1,6 +1,8 @@
 import React from "react";
 
-const DeleteZone = () => {
+const DeleteZone = ({onDragOver,onDropDelete }) => {
+
+    
   return (
     <>
       <div onDragOver={onDragOver} onDrop={onDropDelete} >

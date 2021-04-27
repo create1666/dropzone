@@ -4,6 +4,14 @@ import "./App.scss"; // install node-sass to use scss
 // import FormInput from '../src/components'
 import DeleteZone from './DeleteZone'
 
+const reducer = (state =[], action) => {
+   console.log('reducer state', state)
+   console.log('reducer action', action)
+   if (action.type === 'ADD_FILES') {
+     return action.files
+   } return; 
+}
+
 function App() {
   const [files, dispatch] = useReducer(reducer, []);
   const onDragOver = (e) => {
@@ -14,11 +22,12 @@ function App() {
 
   const onDrop = (e) => {
     e.preventDefault();
-    const newfileList = e.dataTransfer.files;
+    let newfileList = e.dataTransfer.files;
     console.log(newfileList);
-    const newFileToSet = [...files, ...newfileList]; // [obj1,ob2,..new]
-    console.log(newItemToSet, "teeing");
-    dispatch({type: 'DROP_FILE',  file: newFileToSet}); // or setFiles(files.concat(...newfileList))
+    let newFileToSet = [ ...newfileList]; // [obj1,ob2,..new]
+    console.log(newFileToSet, "teeing");
+    dispatch({type: 'ADD_FILES',  files: [...files, ...newFileToSet]}); // or setFiles(files.concat(...newfileList))
+    console.log('fiii' , files)
   };
 
   return (
