@@ -1,13 +1,14 @@
 import logo from "./logo.svg";
 import Dropzone from "./Dropzone";
-import React from 'react'
+import React from "react";
+import { v4 } from "uuid";
 import "./App.scss";
 
 function App() {
-  const [files, setFiles] = React.useState([])
-  const [preview, setPreview] = React.useState([])
-  console.log(files)
-  console.log(preview)
+  const [files, setFiles] = React.useState([]);
+  const [preview, setPreview] = React.useState([]);
+  console.log(files);
+  console.log(preview);
   const onDragStart = (e) => {
     console.log(e.dataTransfer);
 
@@ -25,13 +26,40 @@ function App() {
 
   const onDrop = (e) => {
     e.preventDefault();
-    console.log(e.dataTransfer.files);
-    const newFiles = e.dataTransfer.files
-    setFiles(files.concat(...newFiles)) // concat(...[1,2,3,4]) -> concat(1,2,3,4)
+    // console.log(e.dataTransfer.files);
+    console.log("I am working");
 
-    const id = e.dataTransfer.getData("text");
-    const element = document.getElementById(id);
-    e.target.appendChild(element);
+    if (e.dataTransfer.getData("text")) {
+      console.log("isText");
+      const id = e.dataTransfer.getData("text");
+      const element = document.getElementById(id);
+      console.log(e.target.contains(element))
+      if (e.target.contains(element)) {
+        e.target.appendChild(element);
+      }
+    } else {
+      console.log("isFile");
+      let newFiles = e.dataTransfer.files;
+      newFiles = [...newFiles];
+      console.log(newFiles);
+      newFiles = newFiles.map((file) => ({
+        file,
+        id: v4(),
+      }));
+      setFiles(files.concat(...newFiles)); // concat(...[1,2,3,4]) -> concat(1,2,3,4)
+    }
+  };
+
+  const onDeleteDrop = (e) => {
+    console.log("Something is dropped to be deleted");
+    const dragId = e.dataTransfer
+      .getData("text")
+      .replace("blob:http://localhost:3000/", "");
+    console.log(files, "files");
+    console.log(dragId, "dragId");
+    const fileteredImgs = files.filter((file) => file.id !== dragId);
+    console.log(fileteredImgs, "fil");
+    setFiles(fileteredImgs);
   };
   return (
     <>
@@ -49,7 +77,13 @@ function App() {
         A new div
       </div>
       <Dropzone files={files} onDrop={onDrop} onDragOver={onDragOver} />
-      <div className='delete-item'>Drag here to delete</div>
+      <div
+        className="delete-item"
+        onDrop={onDeleteDrop}
+        onDragOver={onDragOver}
+      >
+        Drag here to delete
+      </div>
     </>
   );
 }
