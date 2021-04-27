@@ -12,13 +12,13 @@ function App() {
   const onDrop = () => {
     e.preventDefault()
     const newfileList=e.dataTranfer.files
-    setFiles([...files, newfileList ])
+    setFiles([...files, newfileList ]) // or setFiles(files.concat(...newfileList))
   }
 
   
   return <div className={App}>
     <h1>Files-Image Drag and drop feature</h1>
-    <DropZone/>
+    <DropZone onDrop={onDrop} onDragOver={onDragOver} files={files}/>
   </div>
 }
 export default App;
