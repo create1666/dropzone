@@ -1,29 +1,24 @@
-import React from "react";
+import REACT from 'react'
 
-const Dropzone = ({ onDrop, onDragOver, files }) => {
-  const onDragEnter = (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
-  };
-  return (
-    <div
-      onDrop={onDrop}
-      onDragOver={onDragOver}
-      onDragEnter={onDragEnter}
-      className={"drag-drop-zone"}
-    >
-      <p>Drag your files here</p>
-      <div className="img-preview-wrapper">
-        {files.map((file, key) => {
-          return (
-            <div key={key}>
-              <img className="preview-image" src={URL.createObjectURL(file)} />
-            </div>
-          );
-        })}
-      </div>
+const DropZone = ({onDrop, onDragOver, files}) => {
+
+ 
+  const imgLists = files.map((file, key) => {
+    return <div key={key}>
+      <img className='preview-image' src={URL.createObjectURL(file)}></img>
     </div>
-  );
-};
+  })
+  return <>
+  <div className='drag-drop-zone'  onDrop={onDrop} onDragOver={onDragOver}>
+     <p>Hi! you can drag your files here...</p>
+     <div>
+       <div className="img-preview-wrapper">
+       {imgLists}
+       </div>
+     </div>
+  </div>
+  
+  </>
+}
 
-export default Dropzone;
+export default DropZone

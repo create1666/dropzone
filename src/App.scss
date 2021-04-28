@@ -3,6 +3,12 @@
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+
+  & h1 {
+    background-color: lightblue;
+    border-radius: 1px;
+    padding: .5rem;
+  }
 }
 
 .drag-drop-zone {
@@ -29,8 +35,8 @@
 }
 
 .preview-image {
-  width: 50px;
-  height: 50px;
+  width: 90px;
+  height: 90px;
   margin-left: 10px;
   border-radius: 5px;
 }

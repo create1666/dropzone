@@ -1,57 +1,48 @@
-import logo from "./logo.svg";
-import Dropzone from "./Dropzone";
-import React from 'react'
-import "./App.scss";
+import React, { useReducer, useState } from "react";
+import DropZone from "./Dropzone";
+import "./App.scss"; // install node-sass to use scss
+// import FormInput from '../src/components'
+import DeleteZone from './DeleteZone'
+
+const reducer = (state =[], action) => {
+   console.log('reducer state', state)
+   console.log('reducer action', action)
+   if (action.type === 'ADD_FILES') {
+     return action.files
+   } return; 
+}
 
 function App() {
-  const [files, setFiles] = React.useState([])
-  const [preview, setPreview] = React.useState([])
-  console.log(files)
-  console.log(preview)
-  const onDragStart = (e) => {
-    console.log(e.dataTransfer);
-
-    e.dataTransfer.setData("text", e.target.id);
-    console.log("Drag start");
-  };
-
-  const onDragEnd = (e) => {
-    console.log("Draga end");
-  };
-
+  const [files, dispatch] = useReducer(reducer, []);
   const onDragOver = (e) => {
     e.preventDefault();
   };
 
+  console.log(files);
+
   const onDrop = (e) => {
     e.preventDefault();
-    console.log(e.dataTransfer.files);
-    const newFiles = e.dataTransfer.files
-    setFiles(files.concat(...newFiles)) // concat(...[1,2,3,4]) -> concat(1,2,3,4)
-
-    const id = e.dataTransfer.getData("text");
-    const element = document.getElementById(id);
-    e.target.appendChild(element);
+    let newfileList = e.dataTransfer.files;
+    console.log(newfileList);
+    let newFileToSet = [ ...newfileList]; // [obj1,ob2,..new]
+    console.log(newFileToSet, "teeing");
+    dispatch({type: 'ADD_FILES',  files: [...files, ...newFileToSet]}); // or setFiles(files.concat(...newfileList))
+    console.log('fiii' , files)
   };
+
   return (
-    <>
-      <div className="App">
-        <p
-          id="drag-p"
-          draggable={true}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-        >
-          We will be dargging this very soon
-        </p>
+    <div className="App">
+      <h1>Files-Image Drag and drop feature</h1>
+      <input type="text" placeholder="Enter text here..." name="text" />
+      <div>
+        <li></li>
       </div>
-      <div onDrop={onDrop} onDragOver={onDragOver}>
-        A new div
+      <div draggable={true} onDrop={ondrop} onDragOver={onDragOver}>
+        <p>Hi! you can drag your texts here...</p>
       </div>
-      <Dropzone files={files} onDrop={onDrop} onDragOver={onDragOver} />
-      <div className='delete-item'>Drag here to delete</div>
-    </>
+      <DropZone onDrop={onDrop} onDragOver={onDragOver} files={files} />
+      <DeleteZone onDragOver={onDragOver} ondrop={onDrop}/>
+    </div>
   );
 }
-
 export default App;
